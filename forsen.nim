@@ -16,8 +16,7 @@ proc encode(input: string): string =
   # Index is the location number of the letter.
   # C is the actual character as a string value
   for idx, c in input[0 .. ^1]:
-    # echo "Index:", idx, "Item:", c
-
+    
     # Convert to Ascii by first converting the string 
     # value to a char and then to an int.
     # https://stackoverflow.com/a/58095970
