@@ -5,12 +5,14 @@ import strutils
 # var codeword: string = "forsen"
 
 # var input = readLine(stdin)
-var input = readFile("input.txt")
-var words = input.split({ ' ', ',' })
+# var input = readFile("input.txt")
+# var input = "foo 🤖 bar"
+var input = "Hello World!"
+# var words = input.split({ ' ', ',' })
 echo "INPUT: \n", input
 
 # get the length of the input.
-var num_words = words.len
+# var num_words = words.len
 # echo num_words
 
 var encoded_text: string
@@ -28,12 +30,21 @@ for idx, c in input[0 .. ^1]:
   var ascii_value = int(char(c))
 
   echo idx
-    
+  # if ascii charcode > 127 put current codepoint in encoded text
+  if ascii_value > 127:
+    encoded_word.add(c)
+    continue
+   
+
   # if current codepoint is a space and previous codepoint was
   # > 127 do not add the space to the encoded text
-  if int(char(input[idx])) == 32:
-    if int(char(input[idx-1])) > 127:
-      continue
+  if int(char(input[idx])) == 32 and int(char(input[idx-1])) > 127:
+    echo "current: ", char(input[idx])
+    echo "previous: ", char(input[idx-1])
+    echo int(char(input[idx])), " SPACEDETECTED" 
+      # echo int(char(input[idx-1]))
+    encoded_word.add("")
+    continue
 
   # if this is not the first iteration and the previous
   # ascii charcode was not > 127 then add a space to the encoded
@@ -43,6 +54,7 @@ for idx, c in input[0 .. ^1]:
     if int(char(input[idx-1])) < 127:
       encoded_word.add(" ")
   
+  
   ## control
   ## echo "Ascii value:", ascii_value
   ## echo "------------------------------"
@@ -50,10 +62,7 @@ for idx, c in input[0 .. ^1]:
   # if ascii charcode > 127 put current codepoint in encoded text
   # https://forum.nim-lang.org/t/4001#24897
   # That means if we are outside of this scope we 
-  if ascii_value > 127:
-    ## echo "ENCODED WORD ADDED", c
-    encoded_word.add(c)
-  elif ascii_value < 127: 
+  if ascii_value < 127: 
     # Take the ascii value and convert it to binary.
     # For example 'a' == 1100001
     var binary_value = ascii_value.toBin(7)
@@ -113,7 +122,6 @@ for idx, c in input[0 .. ^1]:
 
    
   
-    # iteration += 1
 
   #  if binary_value[0] == '0':
   #    encoded_word.add('f')
