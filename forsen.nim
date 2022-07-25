@@ -1,13 +1,6 @@
 import typetraits
 import strutils
 
-# Read from file
-# var input = readFile("input.txt")
-
-
-var in_hello_world = "Hello World!"
-var in_foo_bar = "foo 🤖 bar"
-# var in_rfc = readFile("rfc.txt")
 
 
 proc encode(input: string): string =
@@ -46,6 +39,7 @@ proc encode(input: string): string =
     # That means if we are outside of this scope we 
     if ascii_value < 127: 
       # convert it to binary.
+      # var binary_value =  ascii_value & 0b1000000
       var binary_value = ascii_value.toBin(7)
       
         
@@ -103,7 +97,31 @@ proc encode(input: string): string =
   # return the encoded word
   encoded_text
 
+# uncomment for benchmark
+# https://stackoverflow.com/a/36580495
+#import times, os, strutils
+#
+#template benchmark(benchmarkName: string, code: untyped) =
+#  block:
+#    let t0 = epochTime()
+#    echo "Input: ", in_rfc, "\nOutput: ", encode(in_rfc)
+#    let elapsed = epochTime() - t0
+#    let elapsedStr = elapsed.formatFloat(format = ffDecimal, precision = 5)
+#    echo "CPU Time [", benchmarkName, "] ", elapsedStr, "s"
+#
+#benchmark "my benchmark":
+#  sleep 300
 
+# Read from file
+# var input = readFile("input.txt")
+
+
+# For benchmarking
+# var in_rfc = readFile("rfc.txt")
+# var in_rfc = readFile("rfc6455.html")
+#echo "Input: ", in_rfc, "\nOutput: ", encode(in_rfc)
+
+var in_hello_world = "Hello World!"
+var in_foo_bar = "foo 🤖 bar"
 echo "Input: ", in_hello_world, "\nOutput: ", encode(in_hello_world)
 echo "Input: ", in_foo_bar, "\nOutput: ", encode(in_foo_bar)
-# echo "Input: ", in_rfc, "\nOutput: ", encode(in_rfc)
