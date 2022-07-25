@@ -7,10 +7,11 @@ import strutils
 # var input = readLine(stdin)
 var input = readFile("input.txt")
 var words = input.split({ ' ', ',' })
-#
+echo "INPUT: \n", input
+
 # get the length of the input.
 var num_words = words.len
-echo num_words
+# echo num_words
 
 var encoded_text: string
 var encoded_word: string = ""
@@ -27,20 +28,20 @@ for idx, c in input[0 .. ^1]:
   var ascii_value = int(char(c))
   
   ## control
-  echo "Ascii value:", ascii_value
+  ## echo "Ascii value:", ascii_value
   ## echo "------------------------------"
 
   # if ascii charcode > 127 put current codepoint in encoded text
   # https://forum.nim-lang.org/t/4001#24897
   # That means if we are outside of this scope we 
   if ascii_value > 127:
-    echo "ENCODED WORD ADDED", c
+    ## echo "ENCODED WORD ADDED", c
     encoded_word.add(c)
   elif ascii_value < 127: 
     # Take the ascii value and convert it to binary.
     # For example 'a' == 1100001
     var binary_value = ascii_value.toBin(7)
-    echo "Binary value:", binary_value
+    ## echo "Binary value:", binary_value
     
     var strbin = string(binary_value)
      
