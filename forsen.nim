@@ -97,8 +97,17 @@ proc encode(input: string): string =
   # return the encoded word
   encoded_text
 
-# uncomment for benchmark
-# https://stackoverflow.com/a/36580495
+
+var in_hello_world = "Hello World!"
+var in_foo_bar = "foo 🤖 bar"
+echo "Input: ", in_hello_world, "\nOutput: ", encode(in_hello_world)
+echo "Input: ", in_foo_bar, "\nOutput: ", encode(in_foo_bar)
+
+## https://stackoverflow.com/a/36580495
+## uncomment for benchmark
+#
+#var in_rfc = readFile("rfc6455.html")
+#echo "Input: ", in_rfc, "\nOutput: ", encode(in_rfc)
 #import times, os, strutils
 #
 #template benchmark(benchmarkName: string, code: untyped) =
@@ -111,17 +120,3 @@ proc encode(input: string): string =
 #
 #benchmark "my benchmark":
 #  sleep 300
-
-# Read from file
-# var input = readFile("input.txt")
-
-
-# For benchmarking
-# var in_rfc = readFile("rfc.txt")
-# var in_rfc = readFile("rfc6455.html")
-#echo "Input: ", in_rfc, "\nOutput: ", encode(in_rfc)
-
-var in_hello_world = "Hello World!"
-var in_foo_bar = "foo 🤖 bar"
-echo "Input: ", in_hello_world, "\nOutput: ", encode(in_hello_world)
-echo "Input: ", in_foo_bar, "\nOutput: ", encode(in_foo_bar)
