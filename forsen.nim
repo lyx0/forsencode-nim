@@ -113,7 +113,7 @@ echo "Input: ", in_foo_bar, "\nOutput: ", encode(in_foo_bar)
 #template benchmark(benchmarkName: string, code: untyped) =
 #  block:
 #    let t0 = epochTime()
-#    echo "Input: ", in_rfc, "\nOutput: ", encode(in_rfc)
+#    echo encode(in_rfc)
 #    let elapsed = epochTime() - t0
 #    let elapsedStr = elapsed.formatFloat(format = ffDecimal, precision = 5)
 #    echo "CPU Time [", benchmarkName, "] ", elapsedStr, "s"
