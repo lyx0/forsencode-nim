@@ -26,6 +26,22 @@ for idx, c in input[0 .. ^1]:
   # value to a char and then to an int.
   # https://stackoverflow.com/a/58095970
   var ascii_value = int(char(c))
+
+  echo idx
+    
+  # if current codepoint is a space and previous codepoint was
+  # > 127 do not add the space to the encoded text
+  if int(char(input[idx])) == 32:
+    if int(char(input[idx-1])) > 127:
+      continue
+
+  # if this is not the first iteration and the previous
+  # ascii charcode was not > 127 then add a space to the encoded
+  # text 
+  if idx >= 1:
+  # var ascii_value = int(char(c))
+    if int(char(input[idx-1])) < 127:
+      encoded_word.add(" ")
   
   ## control
   ## echo "Ascii value:", ascii_value
@@ -45,15 +61,6 @@ for idx, c in input[0 .. ^1]:
     
     var strbin = string(binary_value)
      
-   # let 
-   #   letter_f = strbin[0]
-   #   letter_o = strbin[1..2]
-   #   letter_r = strbin[3]
-   #   letter_s = strbin[4]
-   #   letter_e = strbin[5]
-   #   letter_n = strbin[6]
-     
-    if ascii_value == 32: encoded_word.add(" ")
     # if ascii_value == 10: continue
       
     let 
@@ -103,10 +110,10 @@ for idx, c in input[0 .. ^1]:
       encoded_word.add("n")
     else:
       encoded_word.add("N")
-    
-    # Add the last line
-    encoded_word.add(" ")
+
+   
   
+    # iteration += 1
 
   #  if binary_value[0] == '0':
   #    encoded_word.add('f')
