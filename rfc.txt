@@ -1,0 +1,247 @@
+From: -                                                Proposed Standard
+Updated by: -                                                          -
+
+Internet Pajlads Task Force (IPTF)                                GaZaTu
+Request for Comments: 0                                      Pajlads Org
+Category: Standards Track                                              -
+ISSN: -                                                                -
+                                                               July 2022
+
+
+                         The ForsenCode Protocol
+
+Abstract
+
+   The ForsenCode Protocol enables multi-way communication between
+   fellow forsenbajs/pajlads in a novel and secretive way.
+   The protocol consists of several differently capitalized variations
+   of the word/name "forsen" to enable a 7-bit ascii encoding of text.
+   To facilitate more advanced forms of text communication (e.g.
+   emojis and other UTF-8 characters) not encodable with 7-bit both
+   the encoder and the decoder are capable of interpolating encoded
+   ascii and non encoded UTF-8. The goal of this technology is to
+   provide a mechanism for enlightened users that need a multi-way
+   communication to talk to eachother hidden in plain sight not easily
+   understandable by users not knowing the ForsenCode protocol.
+
+Status of This Memo
+
+   This is an Internet Standards Track document.
+
+   This document is a product of the Internet Pajlads Task Force
+   (IPTF).  It represents the consensus of the IPTF community.  It has
+   received public review and has been approved for publication by the
+   Internet Pajlads Steering Group (IPSG).  Further information on
+   Internet Standards is available in Section 2 of RFC 5741.
+
+Copyright Notice
+
+   MIT License
+
+   Copyright (c) 2022 Pajlads
+
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+
+
+
+
+GaZaTu                       Standards Track                    [Page 1]
+
+
+RFC ----                 The ForsenCode Protocol               July 2022
+
+
+Table of Contents
+
+   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  2
+     1.1.  Background . . . . . . . . . . . . . . . . . . . . . . . .  2
+   2.  Encoding . . . . . . . . . . . . . . . . . . . . . . . . . . .  3
+     2.1.  Encoding an ascii character  . . . . . . . . . . . . . . .  3
+     2.2.  Encoding procedure . . . . . . . . . . . . . . . . . . . .  3
+     2.3.  Test cases (encoding)  . . . . . . . . . . . . . . . . . .  3
+   3.  Decoding . . . . . . . . . . . . . . . . . . . . . . . . . . .  4
+     3.1.  Decoding an ascii character  . . . . . . . . . . . . . . .  4
+     3.2.  Decoding procedure . . . . . . . . . . . . . . . . . . . .  4
+     3.3.  Test cases (decoding)  . . . . . . . . . . . . . . . . . .  4
+   4.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . .  5
+
+
+
+GaZaTu                       Standards Track                    [Page 2]
+
+
+RFC ----                 The ForsenCode Protocol               July 2022
+
+
+1.  Introduction
+
+1.1.  Background
+
+   _This section is non-normative._
+
+   Historically, communication between multiple forsenbajs/pajlads
+   gave unwanted users (e.g. juicers, weebs, ...) the ability to read
+   these messages and inject themselves into the conversation.
+
+   This results in a variety of problems:
+
+   o  Annoying comments or emojis/emotes by bystanders
+
+   o  bla bla bla
+
+   An obvious solution would be to encrypt text messages so only
+   users with the appropriate key would be able to decrypt and
+   thus read messages and reply. There are of course existing solutions
+   to this problem but none were able to provide the same comedic value
+   which ForsenCode provides.
+
+
+
+GaZaTu                       Standards Track                    [Page 3]
+
+
+RFC ----                 The ForsenCode Protocol               July 2022
+
+
+2.  Encoding
+
+2.1.  Encoding an ascii character
+
+   The ForsenCode codeword is "forsen". To encode an ascii character
+   the encoder encodes a 7 bit binary string into the codeword with
+   the "f" representing the most significant bit and
+   the "n" representing the least significant bit. An active bit (1)
+   is represented as the appropriate uppercase letter (e.g. if
+   the most significant bit is 1 then the "f" is written to
+   the encoded text as "F"). Because the codeword only has
+   6 characters this procedure would only be able to encode 6 bits.
+   Thus the encoder uses the "o" in the codeword to represent 2 bits
+   instead of 1.
+
+   Bit encoding for the character "o" in the codeword:
+   - "Ö" => 00
+   - "ö" => 01
+   - "O" => 10
+   - "o" => 11
+
+   Visual example with the character "a" (97):
+   2^6 | 2^5   2^4 | 2^3 | 2^2 | 2^1 | 2^0
+     1 |   1     0 |   0 |   0 |   0 |   1
+     F |         O |   r |   s |   e |   N
+
+
+2.2.  Encoding procedure
+
+   - trim text
+   - iterate UTF-8 codepoints in text
+     - get the ascii charcode
+     - if ascii charcode > 127 put current codepoint in encoded text
+     - if current codepoint is a space and previous codepoint was
+       > 127 do not add the space to the encoded text
+     - convert the ascii charcode to binary (padded to 7 bits)
+     - convert the binary string into the encoded codeword
+       as explained above in 2.1.  Encoding an ascii character
+     - if this is not the first iteration and the previous
+       ascii charcode was not > 127 then add a space to the encoded
+       text
+     - add the encoded codeword to the encoded text
+
+
+2.3.  Test cases (encoding)
+
+   "Hello World!" ->
+     "FÖRsen FOrSeN FORSen FORSen FORSEN fOrsen FörSEN FORSEN" +
+     " ForsEn FORSen FOrSen fOrseN"
+
+   "foo 🤖 bar" ->
+     "FOrSEn FORSEN FORSEN fOrsen🤖 FOrsEn FOrseN ForsEn"
+
+
+
+GaZaTu                       Standards Track                    [Page 4]
+
+
+RFC ----                 The ForsenCode Protocol               July 2022
+
+
+2.  Decoding
+
+3.1.  Decoding an ascii character
+
+   The ForsenCode codeword is "forsen". To decode an ascii character
+   the decoder uses a given codeword variant to build a 7 bit binary
+   string which will be parsed to an integer and turned into ascii.
+   See the explanation above in 2.1.  Encoding an ascii character
+   to understand how an ascii character is encoded.
+
+   The decoder will iterate the characters in the codeword and add
+   the appropriate bit to the binary string depending on the case.
+   If the current char is in uppercase then add a 1, otherwise a 0.
+   The "o" in the codeword represents a special case.
+   Check 2.1.  Encoding an ascii character, to see which bits are to
+   be added to the binary string when reaching the "o" position.
+
+
+3.2.  Decoding procedure
+
+   - trim code
+   - copy code as lowercase and with "ö" replaced by "o"
+     (helper to search for the codeword in interpolated text)
+   - search lowercased code for the codeword (repeat until done)
+     - add text between previous codeword and current codeword
+     - convert the codeword to a binary string
+       as explained above in 3.1.  Decoding an ascii character
+     - parse the binary string into an integer
+     - create character from charcode
+     - add the character to the result
+     - if the character after the current codeword is a space then
+       skip it (do not add to result) unless it is the final codeword
+       in the provided code
+   - add text after final codeword to result
+
+
+3.3.  Test cases (decoding)
+
+   "ForsEN ForSeN Forsen FORseN FORSEn FORseN FOrsEN fOrsen foRSeN
+   " fOrsen ForsEN FORSeN FORSEN FORSen" ->
+     "supinic = smol"
+
+   "FORseN fOrsen❤ FoRsEn FORSEn FOrSeN FORseN FoRsen" ->
+     "i ❤ zneix"
+
+
+
+GaZaTu                       Standards Track                    [Page 5]
+
+
+RFC ----                 The ForsenCode Protocol               July 2022
+
+
+4.  Acknowledgements
+
+   Special thanks are due to carburated and omegalulcompactdisc, who had
+   the idea to create some kind of morse code using the word "forsen".
+
+   Of course this protocol only exists because of extensive testing and
+   feedback, so thanks is due all the pajlads, naniboys and
+   some nymnions who helped shape this protocol.
+
+   Additional thanks go to TreuKS and boring_nick, who provided help
+   with creating a rust implementation which can be compiled to
+   WebAssembly.

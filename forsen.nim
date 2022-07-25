@@ -1,159 +1,110 @@
 import typetraits
 import strutils
 
-
-# var codeword: string = "forsen"
-
-# var input = readLine(stdin)
+# Read from file
 # var input = readFile("input.txt")
-# var input = "foo 🤖 bar"
-var input = "Hello World!"
-# var words = input.split({ ' ', ',' })
-echo "INPUT: \n", input
 
-# get the length of the input.
-# var num_words = words.len
-# echo num_words
 
-var encoded_text: string
-var encoded_word: string = ""
-var iteration = 0
+var in_hello_world = "Hello World!"
+var in_foo_bar = "foo 🤖 bar"
+# var in_rfc = readFile("rfc.txt")
 
-# Index is the location number of the letter.
-# C is the actual character as a string value
-for idx, c in input[0 .. ^1]:
-  # echo "Index:", idx, "Item:", c
 
-  # Convert to Ascii by first converting the string 
-  # value to a char and then to an int.
-  # https://stackoverflow.com/a/58095970
-  var ascii_value = int(char(c))
+proc encode(input: string): string =
+  var encoded_text: string
 
-  echo idx
-  # if ascii charcode > 127 put current codepoint in encoded text
-  if ascii_value > 127:
-    encoded_word.add(c)
-    continue
-   
+  # Index is the location number of the letter.
+  # C is the actual character as a string value
+  for idx, c in input[0 .. ^1]:
+    # echo "Index:", idx, "Item:", c
 
-  # if current codepoint is a space and previous codepoint was
-  # > 127 do not add the space to the encoded text
-  if int(char(input[idx])) == 32 and int(char(input[idx-1])) > 127:
-    echo "current: ", char(input[idx])
-    echo "previous: ", char(input[idx-1])
-    echo int(char(input[idx])), " SPACEDETECTED" 
-      # echo int(char(input[idx-1]))
-    encoded_word.add("")
-    continue
+    # Convert to Ascii by first converting the string 
+    # value to a char and then to an int.
+    # https://stackoverflow.com/a/58095970
+    var ascii_value = int(char(c))
 
-  # if this is not the first iteration and the previous
-  # ascii charcode was not > 127 then add a space to the encoded
-  # text 
-  if idx >= 1:
-  # var ascii_value = int(char(c))
-    if int(char(input[idx-1])) < 127:
-      encoded_word.add(" ")
-  
-  
-  ## control
-  ## echo "Ascii value:", ascii_value
-  ## echo "------------------------------"
-
-  # if ascii charcode > 127 put current codepoint in encoded text
-  # https://forum.nim-lang.org/t/4001#24897
-  # That means if we are outside of this scope we 
-  if ascii_value < 127: 
-    # Take the ascii value and convert it to binary.
-    # For example 'a' == 1100001
-    var binary_value = ascii_value.toBin(7)
-    ## echo "Binary value:", binary_value
-    
-    var strbin = string(binary_value)
-     
-    # if ascii_value == 10: continue
-      
-    let 
-      letter_f = strbin[0]
-      letter_o = strbin[1..2]
-      letter_r = strbin[3]
-      letter_s = strbin[4]
-      letter_e = strbin[5]
-      letter_n = strbin[6]
- 
-    if letter_f == '0':
-      encoded_word.add("f")
-    else:
-      encoded_word.add("F")
-
-    # yikes
-    # 00 = Ö
-    if letter_o[0] == '0' and letter_o[1] == '0':
-      encoded_word.add("Ö")
-    # 01 = ö
-    elif letter_o[0] == '0' and letter_o[1] == '1':
-      encoded_word.add("ö")
-    # 10 = O
-    elif letter_o[0] == '1' and letter_o[1] == '0':
-      encoded_word.add("O")
-    elif letter_o[0] == '1' and letter_o[1] == '1':
-      encoded_word.add("o")
-    else:
-      encoded_word.add("ERROR DETECTED")
-
-    if letter_r == '0':
-      encoded_word.add("r")
-    else:
-      encoded_word.add("R")
-
-    if letter_s == '0':
-      encoded_word.add("s")
-    else:
-      encoded_word.add("S")
-
-    if letter_e == '0':
-      encoded_word.add("e")
-    else:
-      encoded_word.add("E")
-
-    if letter_n == '0':
-      encoded_word.add("n")
-    else:
-      encoded_word.add("N")
-
-   
-  
-
-  #  if binary_value[0] == '0':
-  #    encoded_word.add('f')
-  #  else:
-  #    encoded_word.add('F')
-
-    #for i in 0..7:
-      #if i[0] == 0:
-#    for idx, v in binary_value[0 .. ^1]:
-#      echo "idx:", idx, "v:", v
-#
-#     
-#      # var is the integer value of the 
-#      # Convert the value back to the original one
-#      # Otherwise it would be 48/49
-#      # Remove the char() conversion later on
-#
-#     
-#      if v[idx] == 0: 
-#          encoded_word.add('f')
-#        else:
-#          encoded_word.add('F')
-#
-#      # if tmp[0] == "0": echo "XD"
+    # if ascii charcode > 127 put current codepoint in encoded text
+    if ascii_value > 127:
+      encoded_text.add(c)
+      continue
      
 
+    # if current codepoint is a space and previous codepoint was
+    # > 127 do not add the space to the encoded text
+    if int(char(input[idx])) == 32 and int(char(input[idx-1])) > 127:
+      encoded_text.add("")
+      continue
+
+    # if this is not the first iteration and the previous
+    # ascii charcode was not > 127 then add a space to the encoded
+    # text 
+    if idx >= 1:
+      if int(char(input[idx-1])) < 127:
+        encoded_text.add(" ")
+
+    # if ascii charcode > 127 put current codepoint in encoded text
+    # https://forum.nim-lang.org/t/4001#24897
+    # That means if we are outside of this scope we 
+    if ascii_value < 127: 
+      # convert it to binary.
+      var binary_value = ascii_value.toBin(7)
       
+        
+      # binary value is of type string therefore we 
+      # can simply use its index values 4Head
+      let 
+        letter_f = binary_value[0]
+        letter_o = binary_value[1..2]
+        letter_r = binary_value[3]
+        letter_s = binary_value[4]
+        letter_e = binary_value[5]
+        letter_n = binary_value[6]
+   
+      # yikes
+      if letter_f == '0':
+        encoded_text.add("f")
+      else:
+        encoded_text.add("F")
+
+      # 00 = Ö
+      if letter_o[0] == '0' and letter_o[1] == '0':
+        encoded_text.add("Ö")
+      # 01 = ö
+      elif letter_o[0] == '0' and letter_o[1] == '1':
+        encoded_text.add("ö")
+      # 10 = O
+      elif letter_o[0] == '1' and letter_o[1] == '0':
+        encoded_text.add("O")
+      # 11 = o
+      elif letter_o[0] == '1' and letter_o[1] == '1':
+        encoded_text.add("o")
+      else:
+        encoded_text.add("ERROR DETECTED")
+
+      if letter_r == '0':
+        encoded_text.add("r")
+      else:
+        encoded_text.add("R")
+
+      if letter_s == '0':
+        encoded_text.add("s")
+      else:
+        encoded_text.add("S")
+
+      if letter_e == '0':
+        encoded_text.add("e")
+      else:
+        encoded_text.add("E")
+
+      if letter_n == '0':
+        encoded_text.add("n")
+      else:
+        encoded_text.add("N")
+  
+  # return the encoded word
+  encoded_text
 
 
-    
-    # binary_value = toBin(ascii_value): string
-    # echo toBin(ascii_value)
-    # var xd: string = c.toBin(8)
-echo encoded_word
-#echo input
+echo "Input: ", in_hello_world, "\nOutput: ", encode(in_hello_world)
+echo "Input: ", in_foo_bar, "\nOutput: ", encode(in_foo_bar)
+# echo "Input: ", in_rfc, "\nOutput: ", encode(in_rfc)
