@@ -1,6 +1,7 @@
 import typetraits
 import strutils
 
+
 # var codeword: string = "forsen"
 
 # var input = readLine(stdin)
@@ -13,6 +14,7 @@ echo num_words
 
 var encoded_text: string
 var encoded_word: string = ""
+var iteration = 0
 
 # Index is the location number of the letter.
 # C is the actual character as a string value
@@ -25,13 +27,16 @@ for idx, c in input[0 .. ^1]:
   var ascii_value = int(char(c))
   
   ## control
-  ## echo "Ascii value:", ascii_value
+  echo "Ascii value:", ascii_value
   ## echo "------------------------------"
 
   # if ascii charcode > 127 put current codepoint in encoded text
   # https://forum.nim-lang.org/t/4001#24897
   # That means if we are outside of this scope we 
-  if ascii_value < 127:
+  if ascii_value > 127:
+    echo "ENCODED WORD ADDED", c
+    encoded_word.add(c)
+  elif ascii_value < 127: 
     # Take the ascii value and convert it to binary.
     # For example 'a' == 1100001
     var binary_value = ascii_value.toBin(7)
@@ -46,7 +51,9 @@ for idx, c in input[0 .. ^1]:
    #   letter_s = strbin[4]
    #   letter_e = strbin[5]
    #   letter_n = strbin[6]
-      
+     
+    if ascii_value == 32: encoded_word.add(" ")
+    # if ascii_value == 10: continue
       
     let 
       letter_f = strbin[0]
@@ -62,14 +69,19 @@ for idx, c in input[0 .. ^1]:
       encoded_word.add("F")
 
     # yikes
+    # 00 = Ö
     if letter_o[0] == '0' and letter_o[1] == '0':
       encoded_word.add("Ö")
+    # 01 = ö
     elif letter_o[0] == '0' and letter_o[1] == '1':
       encoded_word.add("ö")
+    # 10 = O
     elif letter_o[0] == '1' and letter_o[1] == '0':
       encoded_word.add("O")
-    else:
+    elif letter_o[0] == '1' and letter_o[1] == '1':
       encoded_word.add("o")
+    else:
+      encoded_word.add("ERROR DETECTED")
 
     if letter_r == '0':
       encoded_word.add("r")
@@ -77,7 +89,7 @@ for idx, c in input[0 .. ^1]:
       encoded_word.add("R")
 
     if letter_s == '0':
-      encoded_word.add("S")
+      encoded_word.add("s")
     else:
       encoded_word.add("S")
 
@@ -90,6 +102,10 @@ for idx, c in input[0 .. ^1]:
       encoded_word.add("n")
     else:
       encoded_word.add("N")
+    
+    # Add the last line
+    encoded_word.add(" ")
+  
 
   #  if binary_value[0] == '0':
   #    encoded_word.add('f')
